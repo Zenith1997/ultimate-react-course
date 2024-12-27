@@ -1,13 +1,15 @@
 import "./App.css";
 import { pizzaData } from "../data";
-function Pizza(props) {
+
+function Pizza({ pizzaObj }) {
   return (
-    <div className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h1>{props.pizzaObj.name}</h1>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h1>{pizzaObj.name}</h1>
+        <p>{pizzaObj.ingredients}</p>
+
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : ` $${pizzaObj.price}`}</span>
       </div>
     </div>
   );
@@ -34,28 +36,37 @@ function Headers() {
 
 function Menu() {
   const numPizza = pizzaData.length;
+  //const numPizza = [];
+
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      {numPizza > 0 && (
-        <div>
-          {pizzaData.map((pizza) => (
-            <Pizza key={pizza.name} pizzaObj={pizza} />
-          ))}
-        </div>
+
+      {numPizza > 0 ? (
+        <>
+          <p>Authentic italian cusine</p>
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza key={pizza.name} pizzaObj={pizza} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>Sorry we are currently closed.</p>
       )}
     </main>
   );
 }
 function Footer() {
-  // const hour = new Date().getHours();
-  // const openHour = 12;
-  // const closeHour = 22;
+  //const hour = new Date().getHours();
+  const hour = 9;
+  const openHour = 8;
+  const closeHour = 22;
   // if (hour >= openHour && hour <= closeHour) alert("We are currently open");
   // else alert("Sorry we are closed");
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We are currently open.
+      We are currently open from {openHour}:00 to {closeHour}:00.
     </footer>
   );
 }
