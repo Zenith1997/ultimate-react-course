@@ -1,6 +1,11 @@
 import "./App.css";
 import { pizzaData } from "../data";
 
+import { useEffect } from "react";
+
+import db from "./firebaseConfig"; // Get a list of cities from your database
+import { collection, getDocs } from "firebase/firestore/lite";
+
 function Pizza({ pizzaObj }) {
   return (
     <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
@@ -16,6 +21,18 @@ function Pizza({ pizzaObj }) {
 }
 
 function App() {
+  useEffect(() => {
+    async function getCities(db) {
+      const citiesCol = collection(db, "pizza");
+      const citySnapshot = await getDocs(citiesCol);
+      const cityList = citySnapshot.docs.map((doc) => doc.data());
+      console.log(cityList);
+
+      return cityList;
+    }
+    getCities(db);
+  }, []);
+
   return (
     <div className="container">
       <Headers />
